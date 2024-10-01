@@ -5,7 +5,7 @@ import DashBoardLinks from "./DashboardLinks";
 
 export default function SideBar() {
     return (
-        <div className=" border-2 border-green-500 w-1/6 flex flex-col items-center space-y-10">
+        <div className=" bg-main-100 w-1/6 flex flex-col items-center space-y-10 py-2">
             <div className="font-bold drop-shadow-md">
                 V1
             </div>
