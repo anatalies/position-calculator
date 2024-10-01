@@ -1,6 +1,6 @@
 export default function DashBoard () {
     return (
-        <div>
+        <div className=" h-full">
             DashBoard
         </div>
     )
