@@ -1,0 +1,23 @@
+-- CreateTable
+CREATE TABLE "Trade" (
+    "id" INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+    "pair" TEXT NOT NULL,
+    "lotSize" REAL NOT NULL,
+    "entryPrice" REAL NOT NULL,
+    "exitPrice" REAL NOT NULL,
+    "profitLoss" REAL NOT NULL,
+    "createdAt" DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "accountId" INTEGER NOT NULL,
+    CONSTRAINT "Trade_accountId_fkey" FOREIGN KEY ("accountId") REFERENCES "Account" ("id") ON DELETE RESTRICT ON UPDATE CASCADE
+);
+
+-- CreateTable
+CREATE TABLE "Account" (
+    "id" INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+    "balance" REAL NOT NULL DEFAULT 44.90,
+    "totalProfit" REAL NOT NULL DEFAULT 0,
+    "totalLoss" REAL NOT NULL DEFAULT 0,
+    "drawdown" REAL NOT NULL DEFAULT 0,
+    "createdAt" DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" DATETIME NOT NULL
+);

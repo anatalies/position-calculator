@@ -1,3 +1,4 @@
+import ActionButton from "@/components/ActionButton";
 import { DatePicker } from "@/components/DatePicker";
 import { MetricsTab } from "@/components/MetricsTab";
 
@@ -9,6 +10,7 @@ export default function Page () {
                 <DatePicker/>
             </div>
             <MetricsTab/>
+            <ActionButton onClick={undefined}/>
         </div>
     )
 }
