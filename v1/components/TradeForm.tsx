@@ -8,6 +8,8 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from ".
 import { Input } from "./ui/input"
 import { Button } from "./ui/button"
 import { recordTrade } from "@/lib/actions"
+import { Label } from "./ui/label"
+import SubmitButton from "./SubmitButton"
 
 
  const FormSchema = z.object({
@@ -33,105 +35,37 @@ import { recordTrade } from "@/lib/actions"
       })  
 })
 
-export default function TradeForm() {
-    const form = useForm<z.infer<typeof FormSchema>>({
-      resolver: zodResolver(FormSchema),
-    })
-  
-    function onSubmit(data: z.infer<typeof FormSchema>) {
-        recordTrade(data)
-        toast({
-            title: "You submitted the following values:",
-            description: (
-            <pre className="mt-2 w-[340px] rounded-md bg-slate-950 p-4">
-                <code className="text-white">{JSON.stringify(data, null, 2)}</code>
-            </pre>
-            ),
-        })
-    }
-  
-    return (
-      <Form {...form}>
-        <form onSubmit={form.handleSubmit(onSubmit)} className="w-5/6 mx-auto">
-        <div className="grid grid-cols-2 gap-3 mb-1">
-          <FormField
-            control={form.control}
-            name="pair"
-            render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Currency Pair</FormLabel>
-                  <Select onValueChange={field.onChange} defaultValue={field.value}>
-                    <FormControl>
-                      <SelectTrigger>
-                        <SelectValue placeholder="Select" />
-                      </SelectTrigger>
-                    </FormControl>
-                    <SelectContent>
-                      <SelectItem value="EUR/USD">EUR/USD</SelectItem>
-                      <SelectItem value="GBP/USD">GBP/USD</SelectItem>
-                      <SelectItem value="USD/CHF">USD/CHF</SelectItem>
-                      <SelectItem value="AUD/CAD">USD/CHF</SelectItem>
-                    </SelectContent>
-                  </Select>
-                  <FormMessage />
-                </FormItem>
-            )}
-          />
-          <FormField
-            control={form.control}
-            name="lotSize"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Lot Size</FormLabel>
-                <FormControl>
-                  <Input placeholder="0.10" {...field} />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-          <FormField
-            control={form.control}
-            name="profitLoss"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Profit/Loss</FormLabel>
-                <FormControl>
-                  <Input placeholder="1.00" {...field} />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-          <FormField
-            control={form.control}
-            name="entryPrice"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Entry Price</FormLabel>
-                <FormControl>
-                  <Input placeholder="1.3421" {...field} />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-          <FormField
-            control={form.control}
-            name="exitPrice"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Exit Price</FormLabel>
-                <FormControl>
-                  <Input placeholder="1.3421" {...field} />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-          </div>
-          <Button type="submit" className="my-2">Submit</Button>
-        </form>
-      </Form>
-    )
+export default function TradeForm() {  
+  return (
+    <form action={recordTrade} className="flex flex-col space-y-4">
+      <div className="grid grid-cols-2 gap-4">
+        <div className="grid items-center">
+          <Label>Currency Pair</Label>
+          <select name="pair">
+            <option value={'AUDCAD'}>AUDCAD</option>
+            <option value={'GBP/USD'}>GBP/USD</option>
+            <option value={'EUR/USD'}>EUR/USD</option>
+            <option value={'USD/CHF'}>USD/CHF</option>
+          </select>
+        </div>
+        <div>
+          <Label>Lot Size</Label>
+          <Input name='lotSize' type="number" step={'0.02'} required/>
+        </div>
+        <div>
+          <Label>Profit</Label>
+          <Input name='profit' type="number" required step={'0.10'}/>
+        </div>
+        <div>
+          <Label>Entry Price</Label>
+          <Input name='entryPrice' type="number" required step={'0.0001'}/>
+        </div>
+        <div>
+          <Label>Exit Price</Label>
+          <Input name='exitPrice' type="number" required step={'0.0001'}/>
+        </div>
+      </div>
+      <SubmitButton/>
+    </form>
+  )
 }
