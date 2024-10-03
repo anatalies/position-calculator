@@ -131,16 +131,6 @@ const Calculator = () => {
                 required
               />
             </div>
-             {/* <div>
-              <Label>Entry Price ($):</Label>
-              <Input
-                type="number"
-                name="entryPrice"
-                value={inputs.entryPrice}
-                onChange={handleChange}
-                required
-              />
-            </div> */}
             <div>
               <Label>Stop Loss Size (pips): </Label>
               <Input
