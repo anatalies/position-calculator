@@ -12,6 +12,30 @@ const config: Config = {
   		colors: {
   			background: 'hsl(var(--background))',
   			foreground: 'hsl(var(--foreground))',
+			  main: {
+				50: '#e5f5e9',
+				100: '#c1e5c9',
+				200: '#9ad4a7',
+				300: '#6fc484',
+				400: '#4db86b',
+				500: '#25ab51',
+				600: '#1b9c47',
+				700: '#0d8b3c',
+				800: '#007931',
+				900: '#005b1e',
+			},
+			complementary: {
+				50: '#fee6f2',
+				100: '#fcc1e0',
+				200: '#fd98cb',
+				300: '#ff6db5',
+				400: '#ff4ba1',
+				500: '#ff268c',
+				600: '#f22487',
+				700: '#da2380',
+				800: '#c4207b',
+				900: '#9c1b71',
+			},
   			card: {
   				DEFAULT: 'hsl(var(--card))',
   				foreground: 'hsl(var(--card-foreground))'
