@@ -1,5 +1,6 @@
 'use server'
 
+import { prisma } from '@/client'
 import { revalidatePath } from 'next/cache'
 import { z } from 'zod'
 
@@ -31,6 +32,28 @@ export async function recordTrade(formData:FormData) {
     }
   }
 
-  console.log(validatedFormData.data?.amount)
+  const amountInCents = 
+  validatedFormData.data.amount * 100
+
+  try {
+    console.log(amountInCents)
+    await prisma.trade.create({
+      data: {
+        pair: validatedFormData.data.pair,
+        tradeResult: validatedFormData.data.tradeResult,
+        orderType: validatedFormData.data.orderType,
+        lotSize: validatedFormData.data.lotSize,
+        entryPrice: validatedFormData.data.entryPrice,
+        exitPrice: validatedFormData.data.exitPrice, 
+        amount: amountInCents,
+      }
+    })
+
+  } catch (error) {
+    return {
+      message: 'Database Error: Failed to Create Invoice'
+    }
+  }
+
   revalidatePath('/dashboard/metrics')
 }

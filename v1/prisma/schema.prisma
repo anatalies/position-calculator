@@ -10,23 +10,24 @@ datasource db {
 }
 
 model Trade {
-  id         Int      @id @default(autoincrement())
+  id         Int?      @id @default(autoincrement())
   pair       String
+  tradeResult String
+  orderType  String
   lotSize    Float
   entryPrice Float
   exitPrice  Float
-  profitLoss Float
-  createdAt  DateTime @default(now())
-  account    Account  @relation(fields: [accountId], references: [id])
-  accountId  Int
+  amount     Float
+  createdAt  DateTime? @default(now())
+  account    Account?  @relation(fields: [accountId], references: [id])
+  accountId  Int?
 }
 
 model Account {
   id         Int      @id @default(autoincrement())
-  balance    Float    @default(44.90) // Initial account balance
+  balance    Int    @default(0) // Initial account balance
   totalProfit Float   @default(0)
   totalLoss  Float    @default(0)
-  drawdown   Float    @default(0)     // Maximum drawdown (optional)
   createdAt  DateTime @default(now())
   updatedAt  DateTime @updatedAt
   trades     Trade[]
