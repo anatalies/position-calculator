@@ -8,7 +8,7 @@ export interface CalculatorInput {
     takeProfitSize?: number
     selectedPair: CurrencyPair
     riskReward: number
-
+    takeProfitPips: number
 }
 
 export interface CalculatorOutput {
@@ -16,8 +16,8 @@ export interface CalculatorOutput {
     lotSize?: number
     totalRisk: number
     stopLossDistance?: number
-    positionSize?: number
-    profit?: number
+    positionSize: number
+    profit: number
 }
 
 export interface CurrencyPair {

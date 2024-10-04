@@ -5,13 +5,16 @@ import {
   CalculatorOutput, 
   CurrencyPair 
 } from '@/types/types'
+
 import React, { useState } from 'react'
+
 import {
   Card,
   CardContent,
   CardHeader,
   CardTitle,
 } from "@/components/ui/card"
+
 import { Label } from './ui/label'
 import { Input } from './ui/input'
 import { Button } from './ui/button'
@@ -25,40 +28,29 @@ const currencyPairs: CurrencyPair[] = [
 
 
 const calculatePositionSize = ({
-    accountBalance,
-    riskPercentage,
-    stopLossSize,
-    selectedPair,
-    riskReward,
-    entryPrice
+  accountBalance,
+  riskPercentage,
+  stopLossSize,
+  selectedPair,
+  riskReward,
+  entryPrice,
+  takeProfitPips,
 
-  }: CalculatorInput): CalculatorOutput => {
-    const riskAmount = (accountBalance * riskPercentage) / 100;
-const pipValuePerLot = selectedPair.pipValue; // Pip value for 1 lot
-
-// Calculate risk per pip
-const riskPerPip = riskAmount / stopLossSize;
-
-// Determine the correct position size (lot size)
-const positionSize = riskPerPip / pipValuePerLot;
-
-// Total risk in dollars (how much you lose if stop-loss is hit)
-const totalRisk = stopLossSize * pipValuePerLot * positionSize;
-
-// Calculate take profit in pips and the potential profit in dollars
-const takeProfitPips = stopLossSize * riskReward;
-const profit = takeProfitPips * pipValuePerLot * positionSize;
-
-// Calculate stop loss price and take profit price (relative to the entry price)
-const stopLossPrice = entryPrice - (stopLossSize * pipValuePerLot * positionSize);
-const takeProfitPrice = entryPrice + (takeProfitPips * pipValuePerLot * positionSize);
-
-    return {
-      positionSize,
-      totalRisk,
-      profit,
-      riskAmount
-    }
+}: CalculatorInput): CalculatorOutput => {
+  const riskAmount = (accountBalance * riskPercentage) / 100
+  const pipValuePerLot = selectedPair.pipValue
+  const valuePerPip = riskAmount / stopLossSize
+  const lotSize = riskAmount * valuePerPip 
+  const positionSize = riskAmount / (stopLossSize * pipValuePerLot)
+  const totalRisk = stopLossSize * pipValuePerLot * positionSize
+  const profit = takeProfitPips * pipValuePerLot * positionSize
+  return {
+    positionSize,
+    totalRisk,
+    profit,
+    riskAmount,
+    lotSize
+  }
 }
 
 
@@ -70,7 +62,8 @@ const Calculator = () => {
         selectedPair: currencyPairs[0],
         stopLossPrice: 1.2325,
         riskReward: 4,
-        entryPrice: 1.4672
+        entryPrice: 1.4672,
+        takeProfitPips: 8.0
     })
 
     const [result, setResult] = useState<CalculatorOutput | null>(null) 
@@ -131,18 +124,8 @@ const Calculator = () => {
                 required
               />
             </div>
-             {/* <div>
-              <Label>Entry Price ($):</Label>
-              <Input
-                type="number"
-                name="entryPrice"
-                value={inputs.entryPrice}
-                onChange={handleChange}
-                required
-              />
-            </div> */}
             <div>
-              <Label>Stop Loss Size (pips): </Label>
+              <Label>Stop Loss (pips): </Label>
               <Input
                 type="number"
                 name="stopLossSize"
@@ -152,6 +135,16 @@ const Calculator = () => {
                 required
               />
             </div>
+            <div>
+              <Label>Take Profit (pips):</Label>
+              <Input
+                type="number"
+                name="takeProfitPips"
+                value={inputs.takeProfitPips}
+                onChange={handleChange}
+                required
+              />
+            </div> 
             <div>
               <Label>Risk/Reward: </Label>
               <Input
@@ -163,13 +156,7 @@ const Calculator = () => {
                 placeholder='Optional'
               />
             </div>
-            <Button type="submit" className='my-2 bg-purple-600' 
-              // onClick={() => {
-              //   console.log(inputs.selectedPair.pipValue)
-              //   const pp = inputs.selectedPair.pipValue * 1
-              //   console.log(pp)
-              // }}
-            >Calculate</Button>
+            <Button type="submit" className='my-2 bg-purple-600'>Calculate</Button>
           </form>
 
           {result && (
@@ -178,6 +165,7 @@ const Calculator = () => {
               <p>Risk Amount: ${result.riskAmount.toFixed(2)}</p>
               <p>Total Risk: ${result.totalRisk.toFixed(2)}</p>
               <p>Profit: ${result.profit.toFixed(2)}</p>
+              <p>Lot: ${result.lotSize?.toFixed(2)}</p>
             </div>
           )}
         </CardContent>
