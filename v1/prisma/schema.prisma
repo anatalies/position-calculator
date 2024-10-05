@@ -1,35 +1,47 @@
-// docs: https://pris.ly/d/prisma-schema
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
 
 generator client {
   provider = "prisma-client-js"
 }
 
 datasource db {
-  provider = "sqlite"
-  url      = env("DATABASE_URL")
-}
-
-model Trade {
-  id         Int?      @id @default(autoincrement())
-  pair       String
-  tradeResult String
-  orderType  String
-  lotSize    Float
-  entryPrice Float
-  exitPrice  Float
-  amount     Float
-  createdAt  DateTime? @default(now())
-  account    Account?  @relation(fields: [accountId], references: [id])
-  accountId  Int?
+  provider = "postgresql"
+  url      = env("DIRECT_URL")
+  //directUrl = env("DIRECT_URL")
 }
 
 model Account {
   id         Int      @id @default(autoincrement())
-  balance    Int    @default(0) // Initial account balance
-  totalProfit Float   @default(0)
-  totalLoss  Float    @default(0)
-  createdAt  DateTime @default(now())
-  updatedAt  DateTime @updatedAt
-  trades     Trade[]
+  balance    Float    @default(0.0)    
+  profit     Float    @default(0.0)      
+  loss       Float    @default(0.0)      
+  tradeCount Int      @default(0)        
+  trades     Trade[]  // One-to-many relationship
 }
 
+model Trade {
+  id          Int      @id @default(autoincrement())
+  type        TradeType
+  result      TradeResult
+  currencyPair String
+  lotSize     Float
+  entryPrice  Float
+  exitPrice   Float
+  account     Account  @relation(fields: [accountId], references: [id])
+  accountId   Int
+  createdAt   DateTime @default(now())
+}
+
+enum TradeType {
+  BUY
+  SELL
+}
+
+enum TradeResult {
+  PROFIT
+  LOSS
+}

@@ -1,6 +1,7 @@
 'use server'
 
-import { prisma } from '@/client'
+// import { prisma } from '@/client'
+import { PrismaClient } from '@prisma/client'
 import { revalidatePath } from 'next/cache'
 import { z } from 'zod'
 
@@ -13,6 +14,8 @@ const schema = z.object({
   orderType: z.string(),
   tradeResult: z.string()
 })
+
+const prisma = new PrismaClient()
 
 export async function recordTrade(formData:FormData) {
   const validatedFormData =  schema.safeParse({
@@ -57,3 +60,5 @@ export async function recordTrade(formData:FormData) {
 
   revalidatePath('/dashboard/metrics')
 }
+
+// AbaijahFellow?
