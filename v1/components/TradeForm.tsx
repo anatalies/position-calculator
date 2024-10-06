@@ -1,11 +1,10 @@
 'use client'
 import { toast } from "@/hooks/use-toast"
-import { z } from "zod"
 import { Input } from "./ui/input"
 import { recordTrade } from "@/lib/actions"
 import { Label } from "./ui/label"
 import SubmitButton from "./SubmitButton"
-import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrigger, SelectValue } from "./ui/select"
+import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from "./ui/select"
 
 
 export default function TradeForm() {  
@@ -36,8 +35,8 @@ export default function TradeForm() {
             </SelectTrigger>
             <SelectContent>
               <SelectGroup>
-                <SelectItem value="buy">Buy</SelectItem>
-                <SelectItem value="sell">Sell</SelectItem>
+                <SelectItem value="BUY">Buy</SelectItem>
+                <SelectItem value="SELL">Sell</SelectItem>
               </SelectGroup>
             </SelectContent>
           </Select>
@@ -50,8 +49,9 @@ export default function TradeForm() {
             </SelectTrigger>
             <SelectContent>
               <SelectGroup>
-                <SelectItem value="profit">Profit</SelectItem>
-                <SelectItem value="loss">Loss</SelectItem>
+                <SelectItem value="PROFIT">Profit</SelectItem>
+                <SelectItem value="LOSS">Loss</SelectItem>
+                <SelectItem value= "BREAKEVEN">Break-Even</SelectItem>
               </SelectGroup>
             </SelectContent>
           </Select>

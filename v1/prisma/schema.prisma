@@ -1,9 +1,3 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
-// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
-// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
-
 generator client {
   provider = "prisma-client-js"
 }
@@ -15,25 +9,27 @@ datasource db {
 }
 
 model Account {
-  id         Int      @id @default(autoincrement())
-  balance    Float    @default(0.0)    
-  profit     Float    @default(0.0)      
-  loss       Float    @default(0.0)      
-  tradeCount Int      @default(0)        
-  trades     Trade[]  // One-to-many relationship
+  id           Int            @id @default(autoincrement())
+  balance      Int            @default(0)
+  profit       Int            @default(0)
+  loss         Int            @default(0)
+  tradeCount   Int            @default(0)
+  trades       Trade[] // One-to-many relationship
+  DailySummary DailySummary[]
 }
 
 model Trade {
-  id          Int      @id @default(autoincrement())
-  type        TradeType
-  result      TradeResult
+  id           Int         @id @default(autoincrement())
+  type         TradeType
+  result       TradeResult
   currencyPair String
-  lotSize     Float
-  entryPrice  Float
-  exitPrice   Float
-  account     Account  @relation(fields: [accountId], references: [id])
-  accountId   Int
-  createdAt   DateTime @default(now())
+  lotSize      Float
+  amount       Int
+  entryPrice   Float
+  exitPrice    Float
+  account      Account     @relation(fields: [accountId], references: [id])
+  accountId    Int
+  createdAt    DateTime    @default(now())
 }
 
 enum TradeType {
@@ -44,4 +40,16 @@ enum TradeType {
 enum TradeResult {
   PROFIT
   LOSS
+  BREAKEVEN
+}
+
+model DailySummary {
+  id           Int      @id @default(autoincrement())
+  accountId    Int
+  date         DateTime
+  dailyBalance Float
+  dailyProfit  Float
+  dailyLoss    Float
+  tradeCount   Int
+  account      Account  @relation(fields: [accountId], references: [id])
 }

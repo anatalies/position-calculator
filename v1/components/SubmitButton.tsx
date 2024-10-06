@@ -2,11 +2,14 @@
 
 import { useFormStatus } from "react-dom";
 import { Button } from "./ui/button";
+import { ReloadIcon } from "@radix-ui/react-icons";
 
 export default function SubmitButton() {
     const { pending } = useFormStatus()
    
     return (
-        <Button type="submit" disabled={pending}>Submit</Button>
+        <Button type="submit" disabled={pending}>
+            Submit
+        </Button>
     )
 }

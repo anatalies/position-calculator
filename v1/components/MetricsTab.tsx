@@ -15,11 +15,13 @@ import {
   TabsList,
   TabsTrigger,
 } from "@/components/ui/tabs"
-import { EyeOpenIcon, PlusIcon } from "@radix-ui/react-icons"
 import React from "react"
 import { AccountChart } from "./AccountChart"
+import { fetchAccountDetails } from "@/lib/actions"
 
-export function MetricsTab() {
+export async function MetricsTab() {
+  const account = await fetchAccountDetails()
+  
   return (
     <Tabs defaultValue="overview" className="">
       <TabsList className="grid w-full grid-cols-4">
@@ -29,10 +31,11 @@ export function MetricsTab() {
         <TabsTrigger value="rabbitHole">Rabbit Hole</TabsTrigger>
       </TabsList>
       <TabsContent value="overview" className="flex flex-col space-y-3">
-        <div className="flex space-x-2">
-          <CustomCard value={2345} label="Balance" icon={<EyeOpenIcon/>}/>
-          <CustomCard value={150} label="Profit" icon={<PlusIcon/>} />
-          <CustomCard value={12} label="Avg P/L" icon={<PlusIcon/>} />
+        <div className="flex space-x-2 w-full">
+          <CustomCard value={account!.accountBalance} label="Balance (USD)"/>
+          <CustomCard value={account!.totalProfit} label="Profit (USD)" />
+          <CustomCard value={account!.averageProfitLossRatio} label="Average P/L"/>
+          <CustomCard value={account!.totalTrades} label="Total Trades"/>
         </div>
         <div className="">
           <AccountChart/>
@@ -68,24 +71,24 @@ export function MetricsTab() {
 interface CustomCardProps {
     label: string
     value: number
-    icon: React.ReactNode
+    icon?: React.ReactNode
     comment?: string
 }
 
 const CustomCard:React.FC<CustomCardProps> = ({label, value, icon, comment}) => {
     return (
-        <Card className="">
-            <CardHeader>
-                <CardTitle className="text-main-500">{label}</CardTitle>
-            </CardHeader>
-            <CardContent>
-                <div>
-                    <h1 className="font-extrabold text-main-900 flex items-center text-2xl">{value}<span className="mx-1">{icon}</span></h1>
-                </div>
-            </CardContent>
-            <CardFooter>
-                <p>{comment}</p>
-            </CardFooter>
-        </Card>
+      <Card className="grid items-center">
+          <CardHeader>
+              <CardTitle className="text-main-500">{label}</CardTitle>
+          </CardHeader>
+          <CardContent>
+              <div>
+                  <h1 className="font-extrabold text-main-900 flex items-center text-2xl">{value}<span className="mx-1"></span></h1>
+              </div>
+          </CardContent>
+          <CardFooter>
+              <p>{comment}</p>
+          </CardFooter>
+      </Card>
     )
 }
