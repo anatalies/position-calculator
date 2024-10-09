@@ -17,10 +17,12 @@ import {
 } from "@/components/ui/tabs"
 import React from "react"
 import { AccountChart } from "./AccountChart"
-import { fetchAccountDetails } from "@/lib/actions"
+import { CustomCardProps } from "@/types/types"
+import { getAccountDetails } from "@/lib/actions"
+import { PLChart } from "./PLChart"
 
 export async function MetricsTab() {
-  const account = await fetchAccountDetails()
+  const account = await getAccountDetails()
   
   return (
     <Tabs defaultValue="overview" className="">
@@ -37,8 +39,9 @@ export async function MetricsTab() {
           <CustomCard value={account!.averageProfitLossRatio} label="Average P/L"/>
           <CustomCard value={account!.totalTrades} label="Total Trades"/>
         </div>
-        <div className="">
+        <div className="flex gap-3">
           <AccountChart/>
+          <PLChart/>
         </div>
       </TabsContent>
       <TabsContent value="charts">
@@ -68,22 +71,15 @@ export async function MetricsTab() {
   )
 }
 
-interface CustomCardProps {
-    label: string
-    value: number
-    icon?: React.ReactNode
-    comment?: string
-}
-
 const CustomCard:React.FC<CustomCardProps> = ({label, value, icon, comment}) => {
     return (
       <Card className="grid items-center">
           <CardHeader>
-              <CardTitle className="text-main-500">{label}</CardTitle>
+              <CardTitle className="text-main-700">{label}</CardTitle>
           </CardHeader>
           <CardContent>
               <div>
-                  <h1 className="font-extrabold text-main-900 flex items-center text-2xl">{value}<span className="mx-1"></span></h1>
+                  <h1 className="font-extrabold text-green-500 flex items-center text-2xl">{value}<span className="mx-1"></span></h1>
               </div>
           </CardContent>
           <CardFooter>

@@ -1,15 +1,13 @@
 'use client'
 
 import React from "react"
-import { ActionButtonProps } from "@/types/types"
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "./ui/dialog"
 import TradeForm from "./TradeForm"
 
-const ActionButton: React.FC<ActionButtonProps> = ({onClick}) => (
+const ActionButton: React.FC = () => (
   <Dialog>
     <DialogTrigger>
       <div 
-          onClick={onClick}
           className="fixed bottom-10 right-10 text-white p-5 rounded-md shadow-lg focus:outline-none focus:ring-4 focus:ring-blue-300 transition transform hover:scale-105 bg-main-400"
       >
           <svg

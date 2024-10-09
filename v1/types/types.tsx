@@ -1,3 +1,6 @@
+import React from "react"
+import { DateRange } from "react-day-picker"
+
 export interface CalculatorInput {
     accountBalance: number
     riskPercentage: number
@@ -56,6 +59,26 @@ export interface TradeState {
     resetTrades: () => void;
 }
 
-export interface ActionButtonProps {
-    onClick: () => void;
+export type DailyBalance = {
+    date: string
+    balance: number
+}
+
+export interface DatePickerProps extends React.HTMLAttributes<HTMLDivElement> {
+    onDateChange: (range: DateRange ) => void
+}
+
+export interface MetricsTabProps {
+    accountBalance: number
+    totalProfit: number
+    totalLoss?: number
+    totalTrades: number
+    averageProfitLossRatio: number
+}
+
+export interface CustomCardProps {
+    label: string
+    value: number
+    icon?: React.ReactNode
+    comment?: string
 }

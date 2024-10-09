@@ -10,7 +10,7 @@ export default function Page () {
                 <DatePicker/>
             </div>
             <MetricsTab/>
-            <ActionButton onClick={undefined}/>
+            <ActionButton/>
         </div>
     )
 }

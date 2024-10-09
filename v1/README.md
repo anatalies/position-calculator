@@ -34,3 +34,57 @@ You can check out [the Next.js GitHub repository](https://github.com/vercel/next
 The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
 
 Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+
+export async function calculateDailyBalances (
+  startDate: Date, endDate: Date ) {
+    const account =  await prisma.account.findUnique({
+      where: {id: 1},
+      select: { balance: true }
+    })
+
+    if (!account) {
+      throw new Error('Account not Found')
+    }
+
+    let currentBalance =  account.balance
+
+    const trades = await prisma.trade.findMany({
+      where: {
+        accountId: 1,
+        createdAt: {
+          gte: startDate,
+          lte: endDate
+        }
+      },
+      orderBy: { createdAt: 'asc'}
+    })
+
+    const datesInRange: Date[] = 
+    eachDayOfInterval({ start: startDate, end: endDate})
+    
+    const dailyBalances : DailyBalance[] = []
+    let tradeIndex = 0
+
+    for ( const date of datesInRange) {
+      //process all trades on this date
+      while (
+        tradeIndex < trades.length &&
+        isSameDay(trades[tradeIndex].createdAt, date)
+      ) {
+        const trade = trades[tradeIndex]
+        if (trade.result === 'PROFIT') {
+          currentBalance += trade.amount
+        } else if (trade.result == 'LOSS'){
+          currentBalance -= trade.amount
+        } else if (trade.result == 'BREAKEVEN') {
+          currentBalance += trade.amount
+        }
+        tradeIndex++
+      }
+      dailyBalances.push({
+        date: date.toISOString().split('T')[0],
+        balance: currentBalance / 100,
+      })
+    }
+    return dailyBalances
+  }
