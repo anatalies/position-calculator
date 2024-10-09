@@ -2,18 +2,10 @@
 
 import { prisma } from '@/client'
 import { TradeResult, TradeType } from '@prisma/client'
+import { endOfMonth, format } from 'date-fns'
 import { revalidatePath } from 'next/cache'
-import { z } from 'zod'
+import { schema } from './utils'
 
-const schema = z.object({
-  pair: z.string(),
-  amount: z.coerce.number(),
-  lotSize: z.coerce.number(),
-  entryPrice: z.coerce.number(),
-  exitPrice: z.coerce.number(),
-  orderType: z.string(),
-  tradeResult: z.string()
-})
 
 export async function recordTrade(formData:FormData) {
   const validatedFormData =  schema.safeParse({
@@ -169,45 +161,29 @@ export async function getAccountDetails() {
   }
 }
 
-export async function fetchDataByPeriod(startDate:Date, endDate:Date) {
-  const results = await prisma.dailySummary.findMany({
-    where: { 
+export async function getDailySummaries(month:string) {
+  const year = new Date().getFullYear()
+  const firstDayOfMonth = new Date(`${year}-${month}-01 00:00:00`)
+  const lastDayOfMonth = endOfMonth(firstDayOfMonth)
+
+  const dailySummaries = await prisma.dailySummary.findMany({
+    where: {
       date: {
-        gte: new Date(startDate),
-        lte: new Date(endDate)
-      } 
+        gte: firstDayOfMonth, lte: lastDayOfMonth
+      }
+    },
+    select: {
+      date: true, dailyBalance: true
     },
     orderBy: {
       date: 'asc'
     }
   })
 
-  const account = await prisma.account.findUnique({
-    where: {
-      id: 1
-    }
-  })
+  const chartData = dailySummaries.map(summary => ({
+    day: format(summary.date, 'dd'),
+    balance: summary.dailyBalance / 100
+  }))
 
-  if (!account) {
-    return null
-  }
-
-  const tradeData = await prisma.trade.findMany({
-    where: { 
-      createdAt: {
-        gte: new Date(startDate),
-        lte: new Date(endDate)
-      }    
-    },
-    orderBy: {
-      createdAt: 'asc'
-    }
-  })
-
- 
-
-  return {
-    results,
-    tradeData,
-  }
+  return chartData
 }

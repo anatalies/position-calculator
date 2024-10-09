@@ -14,9 +14,10 @@ import {ChartConfig,
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "./ui/select"
 import { useEffect, useState } from "react"
 import { format } from "date-fns"
-import { generateChartDataForMonth, getLastFourMonths } from "@/lib/utils"
+import { getLastFourMonths } from "@/lib/utils"
+import { getDailySummaries } from "@/lib/actions"
+import { ChartDataPoint } from "@/types/types"
 
-export const description = "A line chart"
 
 const chartConfig = {
   balance: {
@@ -47,10 +48,14 @@ const chartConfig = {
 
 export function AccountChart() {
   const [activeMonth, setActiveMonth] = useState(format(new Date(), "MMMM"))
-  const [chartData, setChartData] = useState(generateChartDataForMonth(activeMonth))
+  const [chartData, setChartData] = useState<ChartDataPoint[]>([])
 
   useEffect(() => {
-    setChartData(generateChartDataForMonth(activeMonth))
+    const getData = async () => {
+      const data = await getDailySummaries(activeMonth)
+      setChartData(data)
+    }
+    getData()
   }, [activeMonth])
 
   const months = getLastFourMonths()
@@ -129,7 +134,7 @@ export function AccountChart() {
           Trending up by 5.2% this month <TrendingUp className="h-4 w-4" />
         </div>
         <div className="leading-none text-muted-foreground">
-          Showing total visitors for the last 6 months
+          Showing account balances for the past month
         </div>
       </CardFooter>
     </Card>

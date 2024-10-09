@@ -82,3 +82,8 @@ export interface CustomCardProps {
     icon?: React.ReactNode
     comment?: string
 }
+
+export interface ChartDataPoint {
+    day: string;  
+    balance: number; 
+}
