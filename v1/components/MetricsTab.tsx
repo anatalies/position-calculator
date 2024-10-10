@@ -1,14 +1,10 @@
-import { Button } from "@/components/ui/button"
 import {
   Card,
   CardContent,
-  CardDescription,
   CardFooter,
   CardHeader,
   CardTitle,
 } from "@/components/ui/card"
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
 import {
   Tabs,
   TabsContent,
@@ -18,12 +14,15 @@ import {
 import React from "react"
 import { AccountChart } from "./AccountChart"
 import { CustomCardProps } from "@/types/types"
-import { getAccountDetails } from "@/lib/actions"
+import { getAccountDetails, getAllTrades } from "@/lib/actions"
 import { PLChart } from "./PLChart"
 import { BarChartPL } from "./BarChart"
 
 export async function MetricsTab() {
-  const account = await getAccountDetails()
+  const [account, trades] = await Promise.all([getAccountDetails(), getAllTrades()])
+  // const status: string = 'unknown'
+  // const textColor = status.toLowerCase() === 'profit' ? 'text-green-500' :
+  //   status.toLowerCase() === 'loss' ? 'text-red-500' : 'text-gray-500'
   
   return (
     <Tabs defaultValue="overview" className="w-full">
@@ -45,27 +44,29 @@ export async function MetricsTab() {
           <BarChartPL/>
         </div>
       </TabsContent>
-      <TabsContent value="charts">
-        <Card>
-          <CardHeader>
-            <CardTitle>Password</CardTitle>
-            <CardDescription>
-              Change your password here. After saving, you'll be logged out.
-            </CardDescription>
-          </CardHeader>
-          <CardContent className="space-y-2">
-            <div className="space-y-1">
-              <Label htmlFor="current">Current password</Label>
-              <Input id="current" type="password" />
+      <TabsContent value="tradeLog">
+        <Card className="w-full h-full flex flex-col p-4 px-6">
+          <div className="flex justify-between font-medium my-2">
+            <h1>Currency Pair</h1>
+            <h1>Order Type</h1>
+            <h1>Result</h1>
+            <h1>Amount (USD)</h1>
+            <h1>Lot Size</h1>
+          </div>
+          {trades.map((trade) => (
+            <div key={trade.id} className="flex justify-between items-center border-b p-[6px]">
+              <div>{trade.currencyPair}</div>
+              <div>
+                {trade.type.charAt(0).toUpperCase() + trade.type.slice(1).toLowerCase()}
+              </div>
+              <div className={`font-medium ${trade.result.toLowerCase() === 'profit' ? 'text-green-400' : 
+                trade.result.toLowerCase() === 'loss' ? 'text-red-500' : 'text-gray-500'}`}>
+                {trade.result.charAt(0).toUpperCase() + trade.result.slice(1).toLowerCase()}
+              </div>
+              <div>{(trade.amount / 100).toFixed(2)}</div>
+              <div>{trade.lotSize}</div>
             </div>
-            <div className="space-y-1">
-              <Label htmlFor="new">New password</Label>
-              <Input id="new" type="charts" />
-            </div>
-          </CardContent>
-          <CardFooter>
-            <Button>Save password</Button>
-          </CardFooter>
+          ))}
         </Card>
       </TabsContent>
     </Tabs>

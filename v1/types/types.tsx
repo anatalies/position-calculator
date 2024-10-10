@@ -89,3 +89,7 @@ export interface ChartDataPoint {
     dailyProfit?: number
     dailyLoss?: number
 }
+
+export interface StatusProps {
+    status: 'profit' | 'loss'
+}

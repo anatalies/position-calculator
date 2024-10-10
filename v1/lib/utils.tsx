@@ -1,4 +1,5 @@
 import { ChartConfig } from "@/components/ui/chart"
+import { StatusProps } from "@/types/types"
 import { clsx, type ClassValue } from "clsx"
 import { format, subMonths } from "date-fns"
 import { twMerge } from "tailwind-merge"
@@ -89,3 +90,17 @@ export const chartConfig = {
     color: "hsl(var(--chart-12))",
   },
 } satisfies ChartConfig;
+
+export function capitalizeFirstLetter(text: string) {
+  return text.charAt(0).toUpperCase() + text.slice(1).toLocaleLowerCase()
+}
+
+export function Status ({status}: StatusProps) {
+  let textColor = 'text-red-500'
+  if(status.toLowerCase() === 'profit') {
+    textColor = 'text-green-500'
+  }
+  return (
+    <div className={textColor}>{status}</div>
+  )
+}

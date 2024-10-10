@@ -238,3 +238,25 @@ export async function getDailyProfitLoss( month:string ) {
 
   return chartData
 }
+
+export async function getAllTrades() {
+  const data = await prisma.trade.findMany({
+    where: {
+      id: { gt: 0 }
+    },
+    select: {
+      id: true,
+      type: true,
+      createdAt: true,
+      result: true,
+      amount: true,
+      currencyPair: true,
+      lotSize: true
+    },
+    orderBy: { 
+      id: 'desc'
+    }
+  })
+
+  return data
+}

@@ -6,7 +6,6 @@ import { Bar, BarChart, CartesianGrid, XAxis } from "recharts"
 import {
   Card,
   CardContent,
-  CardDescription,
   CardFooter,
   CardHeader,
   CardTitle,
@@ -23,6 +22,7 @@ import { format } from "date-fns"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "./ui/select"
 import { getDailyProfitLoss } from "@/lib/actions"
 import { getLastFourMonths } from "@/lib/utils"
+
 
 
 const chartConfig = {
