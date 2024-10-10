@@ -85,5 +85,7 @@ export interface CustomCardProps {
 
 export interface ChartDataPoint {
     day: string;  
-    balance: number; 
+    balance?: number; 
+    dailyProfit?: number
+    dailyLoss?: number
 }

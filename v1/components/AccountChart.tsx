@@ -14,37 +14,10 @@ import {ChartConfig,
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "./ui/select"
 import { useEffect, useState } from "react"
 import { format } from "date-fns"
-import { getLastFourMonths } from "@/lib/utils"
+import { chartConfig, getLastFourMonths } from "@/lib/utils"
 import { getDailySummaries } from "@/lib/actions"
 import { ChartDataPoint } from "@/types/types"
 
-
-const chartConfig = {
-  balance: {
-    label: "Balance",
-    color: "hsl(var(--chart-1))",
-  },
-  january: {
-    label: "January",
-    color: "hsl(var(--chart-1))",
-  },
-  february: {
-    label: "February",
-    color: "hsl(var(--chart-2))",
-  },
-  march: {
-    label: "March",
-    color: "hsl(var(--chart-3))",
-  },
-  april: {
-    label: "April",
-    color: "hsl(var(--chart-4))",
-  },
-  may: {
-    label: "May",
-    color: "hsl(var(--chart-5))",
-  },
-} satisfies ChartConfig
 
 export function AccountChart() {
   const [activeMonth, setActiveMonth] = useState(format(new Date(), "MMMM"))
@@ -61,7 +34,7 @@ export function AccountChart() {
   const months = getLastFourMonths()
 
   return (
-    <Card>
+    <Card className="w-full">
       <CardHeader className="flex-row items-start space-y-0 space-x-3 pb-0">
         <div className="grid gap-1 my-1">
           <CardTitle>Balance History</CardTitle>
@@ -122,7 +95,7 @@ export function AccountChart() {
             <Line
               dataKey="balance"
               type="natural"
-              stroke="var(--color-balance)"
+              stroke="#ff0000"
               strokeWidth={2}
               dot={false}
             />
@@ -134,7 +107,7 @@ export function AccountChart() {
           Trending up by 5.2% this month <TrendingUp className="h-4 w-4" />
         </div>
         <div className="leading-none text-muted-foreground">
-          Showing account balances for the past month
+          Showing account balances for {activeMonth}
         </div>
       </CardFooter>
     </Card>

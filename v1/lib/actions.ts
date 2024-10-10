@@ -4,7 +4,7 @@ import { prisma } from '@/client'
 import { TradeResult, TradeType } from '@prisma/client'
 import { endOfMonth, format } from 'date-fns'
 import { revalidatePath } from 'next/cache'
-import { schema } from './utils'
+import { monthToNumberMap, schema } from './utils'
 
 
 export async function recordTrade(formData:FormData) {
@@ -165,7 +165,6 @@ export async function getDailySummaries(month:string) {
   const year = new Date().getFullYear()
   const firstDayOfMonth = new Date(`${year}-${month}-01 00:00:00`)
   const lastDayOfMonth = endOfMonth(firstDayOfMonth)
-
   const dailySummaries = await prisma.dailySummary.findMany({
     where: {
       date: {
@@ -173,7 +172,58 @@ export async function getDailySummaries(month:string) {
       }
     },
     select: {
-      date: true, dailyBalance: true
+      date: true, dailyBalance: true, dailyLoss: true, dailyProfit: true
+    },
+    orderBy: {
+      date: 'asc'
+    }
+  })
+  const chartData = dailySummaries.map(summary => ({
+    day: format(summary.date, 'dd'),
+    balance: summary.dailyBalance / 100,
+  }))
+  return chartData
+}
+
+export async function getDailySummaries2(month:string) {
+  const year = new Date().getFullYear()
+  const monthNumber = monthToNumberMap[month] || '01'
+  const firstDayOfMonth = new Date(`${year}-${monthNumber}-01 00:00:00`)
+  const lastDayOfMonth = endOfMonth(firstDayOfMonth)
+  
+  const dailySummaries = await prisma.dailySummary.findMany({
+    where: {
+      date: {
+        gte: firstDayOfMonth, lte: lastDayOfMonth
+      }
+    },
+    select: {
+      date: true, dailyBalance: true, dailyLoss: true, dailyProfit: true
+    },
+    orderBy: {
+      date: 'asc'
+    }
+  })
+  const chartData = dailySummaries.map(summary => ({
+    day: format(summary.date, 'dd'),
+    dailyProfit: summary.dailyProfit / 100,
+    dailyLoss: summary.dailyLoss / 100
+  }))
+  return chartData
+}
+
+export async function getDailyProfitLoss( month:string ) {
+  const year = new Date().getFullYear()
+  const firstDayOfMonth = new Date(`${year}-${month}-01 00:00:00`)
+  const lastDayOfMonth = endOfMonth(firstDayOfMonth)
+  const dailySummaries = await prisma.dailySummary.findMany({
+    where: {
+      date: {
+        gte: firstDayOfMonth, lte: lastDayOfMonth
+      }
+    },
+    select: {
+      date: true, dailyProfit: true, dailyLoss: true,
     },
     orderBy: {
       date: 'asc'
@@ -182,7 +232,8 @@ export async function getDailySummaries(month:string) {
 
   const chartData = dailySummaries.map(summary => ({
     day: format(summary.date, 'dd'),
-    balance: summary.dailyBalance / 100
+    dailyProfit: summary.dailyProfit / 100,
+    dailyLoss: summary.dailyLoss / 100
   }))
 
   return chartData

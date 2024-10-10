@@ -20,19 +20,19 @@ import { AccountChart } from "./AccountChart"
 import { CustomCardProps } from "@/types/types"
 import { getAccountDetails } from "@/lib/actions"
 import { PLChart } from "./PLChart"
+import { BarChartPL } from "./BarChart"
 
 export async function MetricsTab() {
   const account = await getAccountDetails()
   
   return (
-    <Tabs defaultValue="overview" className="">
-      <TabsList className="grid w-full grid-cols-4">
+    <Tabs defaultValue="overview" className="w-full">
+      <TabsList className="grid w-full grid-cols-3">
         <TabsTrigger value="overview">Overview</TabsTrigger>
-        <TabsTrigger value="charts">Charts</TabsTrigger>
         <TabsTrigger value="tradeLog">Trade Log</TabsTrigger>
         <TabsTrigger value="rabbitHole">Rabbit Hole</TabsTrigger>
       </TabsList>
-      <TabsContent value="overview" className="flex flex-col space-y-3">
+      <TabsContent value="overview" className="flex flex-col space-y-3 w-full">
         <div className="flex space-x-2 w-full">
           <CustomCard value={account!.accountBalance} label="Balance (USD)"/>
           <CustomCard value={account!.totalProfit} label="Profit (USD)" />
@@ -42,6 +42,7 @@ export async function MetricsTab() {
         <div className="flex gap-3">
           <AccountChart/>
           <PLChart/>
+          <BarChartPL/>
         </div>
       </TabsContent>
       <TabsContent value="charts">

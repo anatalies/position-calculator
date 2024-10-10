@@ -25,11 +25,18 @@
     --input: 240 5.9% 90%;
     --ring: 142 86% 28%;
     --radius: 0.5rem;
-    --chart-1: 139 65% 20%;
-    --chart-2: 140 74% 44%;
-    --chart-3: 142 88% 28%;
-    --chart-4: 137 55% 15%;
-    --chart-5: 141 40% 9%;
+    --chart-1: 139 65% 20%;  /* January */
+    --chart-2: 140 74% 44%;  /* February */
+    --chart-3: 142 88% 28%;  /* March */
+    --chart-4: 137 55% 15%;  /* April */
+    --chart-5: 141 40% 9%;   /* May */
+    --chart-6: 143 50% 30%;  /* June */
+    --chart-7: 144 60% 45%;  /* July */
+    --chart-8: 145 70% 50%;  /* August */
+    --chart-9: 146 80% 35%;  /* September */
+    --chart-10: 147 65% 25%; /* October */
+    --chart-11: 148 55% 18%; /* November */
+    --chart-12: 149 60% 40%; /* December */
   }
 
   .dark {
