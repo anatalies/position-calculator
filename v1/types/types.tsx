@@ -69,11 +69,8 @@ export interface DatePickerProps extends React.HTMLAttributes<HTMLDivElement> {
 }
 
 export interface MetricsTabProps {
-    accountBalance: number
-    totalProfit: number
-    totalLoss?: number
-    totalTrades: number
-    averageProfitLossRatio: number
+    query: string
+    currentPage: number
 }
 
 export interface CustomCardProps {

@@ -5,6 +5,8 @@ import { TradeResult, TradeType } from '@prisma/client'
 import { endOfMonth, format } from 'date-fns'
 import { revalidatePath } from 'next/cache'
 import { monthToNumberMap, schema } from './utils'
+import { redirect } from 'next/navigation'
+
 
 
 export async function recordTrade(formData:FormData) {
@@ -137,6 +139,7 @@ export async function recordTrade(formData:FormData) {
       }
   }
   revalidatePath('/dashboard/metrics')
+  redirect('/dashboard/metrics')
 }
 
 
@@ -239,8 +242,12 @@ export async function getDailyProfitLoss( month:string ) {
   return chartData
 }
 
-export async function getAllTrades() {
+const itemsPerPage = 7
+
+export async function getAllTrades(currentPage: number) {
   const data = await prisma.trade.findMany({
+    skip: (currentPage - 1) * itemsPerPage,
+    take: itemsPerPage,
     where: {
       id: { gt: 0 }
     },
@@ -260,3 +267,45 @@ export async function getAllTrades() {
 
   return data
 }
+
+
+
+export async function fetchTradePages(query: string) {
+  try {
+    // Prepare conditions based on the query input
+    const whereConditions = [];
+
+    // Check if query can match enum fields (type and result)
+    if (query) {
+      whereConditions.push(
+        { type: { equals: query as any } }, // Cast to 'any' for enum if needed
+        { result: { equals: query as any } }
+      );
+    }
+
+    // Check if query can match integer (amount)
+    const amountQuery = parseInt(query);
+    if (!isNaN(amountQuery)) {
+      whereConditions.push({ amount: { equals: amountQuery } });
+    }
+
+    // Add other fields to search (like date if needed)
+    // Example: { date: { contains: query } } if the field is a string
+
+    // Count total number of trades that match the query
+    const count = await prisma.trade.count({
+      where: {
+        OR: whereConditions.length > 0 ? whereConditions : undefined,
+      },
+    });
+
+    // Calculate the total number of pages
+    const totalPages = Math.ceil(count / itemsPerPage);
+    return totalPages;
+  } catch (error) {
+    console.error('Database Error:', error);
+    throw new Error('Failed to fetch total number of trades.');
+  }
+}  
+
+  

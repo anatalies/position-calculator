@@ -5,31 +5,26 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card"
-import {
-  Tabs,
-  TabsContent,
-  TabsList,
-  TabsTrigger,
-} from "@/components/ui/tabs"
+import {Tabs, TabsContent, TabsList,TabsTrigger} from "@/components/ui/tabs"
 import React from "react"
 import { AccountChart } from "./AccountChart"
-import { CustomCardProps } from "@/types/types"
-import { getAccountDetails, getAllTrades } from "@/lib/actions"
+import { CustomCardProps, MetricsTabProps } from "@/types/types"
+import { fetchTradePages, getAccountDetails, getAllTrades } from "@/lib/actions"
 import { PLChart } from "./PLChart"
 import { BarChartPL } from "./BarChart"
+import Pagination from "./Pagination"
 
-export async function MetricsTab() {
-  const [account, trades] = await Promise.all([getAccountDetails(), getAllTrades()])
-  // const status: string = 'unknown'
-  // const textColor = status.toLowerCase() === 'profit' ? 'text-green-500' :
-  //   status.toLowerCase() === 'loss' ? 'text-red-500' : 'text-gray-500'
+export async function MetricsTab({ query, currentPage} : MetricsTabProps) {
+  const [account, trades, totalPages] = await Promise.all([
+    getAccountDetails(), getAllTrades(currentPage), fetchTradePages(query)
+  ])
   
   return (
     <Tabs defaultValue="overview" className="w-full">
       <TabsList className="grid w-full grid-cols-3">
         <TabsTrigger value="overview">Overview</TabsTrigger>
         <TabsTrigger value="tradeLog">Trade Log</TabsTrigger>
-        <TabsTrigger value="rabbitHole">Rabbit Hole</TabsTrigger>
+        <TabsTrigger value="analytics">Analytics</TabsTrigger>
       </TabsList>
       <TabsContent value="overview" className="flex flex-col space-y-3 w-full">
         <div className="flex space-x-2 w-full">
@@ -40,12 +35,12 @@ export async function MetricsTab() {
         </div>
         <div className="flex gap-3">
           <AccountChart/>
-          <PLChart/>
+          {/* <PLChart/> */}
           <BarChartPL/>
         </div>
       </TabsContent>
       <TabsContent value="tradeLog">
-        <Card className="w-full h-full flex flex-col p-4 px-6">
+        <Card className="w-full h-full flex flex-col p-4 px-6 space-y-2">
           <div className="flex justify-between font-medium my-2">
             <h1>Currency Pair</h1>
             <h1>Order Type</h1>
@@ -67,7 +62,13 @@ export async function MetricsTab() {
               <div>{trade.lotSize}</div>
             </div>
           ))}
+          <div className="flex items-center my-1">
+            <Pagination  totalPages={totalPages}/>
+          </div>
         </Card>
+      </TabsContent>
+      <TabsContent value="analytics">
+
       </TabsContent>
     </Tabs>
   )

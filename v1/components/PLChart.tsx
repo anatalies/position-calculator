@@ -46,11 +46,22 @@ export function PLChart () {
   }, [activeMonth])
 
   const activeIndex = chartData.findIndex((item) => {
-    const itemDate = new Date(item.day);
-    const itemMonth = format(itemDate, 'MMMM');
-    const itemYear = format(itemDate, 'yyyy');
-    return itemMonth === activeMonth && itemYear === format(new Date(), 'yyyy');
-  })
+    // Ensure that item.day exists and is a valid date before processing it
+    const itemDate = item.day ? new Date(item.day) : null;
+    
+    // Check if the itemDate is a valid Date object
+    if (itemDate && !isNaN(itemDate.getTime())) {
+      const itemMonth = format(itemDate, 'MMMM');
+      const itemYear = format(itemDate, 'yyyy');
+      
+      // Compare the item's month and year with the currently active month/year
+      return itemMonth === activeMonth && itemYear === format(new Date(), 'yyyy');
+    }
+    
+    // If the itemDate is invalid, return false so it doesn't match
+    return false;
+  });
+  
 
   const months = getLastFourMonths()
 
@@ -104,10 +115,21 @@ export function PLChart () {
               content={<ChartTooltipContent hideLabel />}
             />
             <Pie
-              data={chartData.map((item) => ({
-                ...item,
-                fill: chartConfig[format(new Date(item.day), 'MMMM').toLowerCase() as keyof typeof chartConfig]?.color 
-              }))}
+              data={chartData.map((item) => {
+                const itemDate = new Date(item.day);
+
+                // Ensure the itemDate is valid
+                if (!isNaN(itemDate.getTime())) {
+                  const monthKey = format(itemDate, "MMMM").toLowerCase();
+                  return {
+                    ...item,
+                    fill: chartConfig[monthKey as keyof typeof chartConfig]?.color || "hsl(var(--default-chart-color))",
+                  };
+                } else {
+                  console.error("Invalid date value in item:", item.day);
+                  throw new Error(`Invalid date value: ${item.day}`);
+                }
+              })}
               dataKey="dailyProfit"
               nameKey="day"
               innerRadius={60}
