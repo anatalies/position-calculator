@@ -34,10 +34,10 @@ export function AccountChart() {
   const months = getLastFourMonths()
 
   return (
-    <Card className="w-full">
+    <Card className="w-full bg-slate-900 border-none">
       <CardHeader className="flex-row items-start space-y-0 space-x-3 pb-0">
         <div className="grid gap-1 my-1">
-          <CardTitle>Balance History</CardTitle>
+          <CardTitle className="text-purple-600">Balance History</CardTitle>
           <CardDescription>{activeMonth}</CardDescription>
         </div>
         <Select value={activeMonth} onValueChange={setActiveMonth}>
@@ -106,7 +106,7 @@ export function AccountChart() {
         <div className="flex gap-2 font-medium leading-none">
           Trending up by 5.2% this month <TrendingUp className="h-4 w-4" />
         </div>
-        <div className="leading-none text-muted-foreground">
+        <div className="leading-none text-muted-foreground text-gray-500">
           Showing account balances for {activeMonth}
         </div>
       </CardFooter>

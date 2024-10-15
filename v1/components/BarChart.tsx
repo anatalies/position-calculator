@@ -51,10 +51,10 @@ export function BarChartPL() {
     const months = getLastFourMonths()
     
     return (
-        <Card className="w-full">
+        <Card className="w-full bg-slate-900 border-none">
         <CardHeader className="flex-row items-start space-y-0 space-x-3 pb-0">
             <div className="grid gap-1 my-1">
-            <CardTitle>Daily Profit & Loss</CardTitle>
+            <CardTitle className="text-purple-600">Daily Profit & Loss</CardTitle>
             </div>
             <Select value={activeMonth} onValueChange={setActiveMonth}>
             <SelectTrigger
