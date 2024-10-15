@@ -40,8 +40,8 @@ export async function MetricsTab({ query, currentPage} : MetricsTabProps) {
         </div>
       </TabsContent>
       <TabsContent value="tradeLog">
-        <Card className="w-full h-full flex flex-col p-4 px-6 space-y-2">
-          <div className="flex justify-between font-medium my-2">
+        <Card className="w-full h-full flex flex-col p-4 px-6 space-y-2 bg-slate-900 border-none">
+          <div className="flex justify-between font-medium my-2 text-gray-400">
             <h1>Currency Pair</h1>
             <h1>Order Type</h1>
             <h1>Result</h1>
@@ -49,8 +49,8 @@ export async function MetricsTab({ query, currentPage} : MetricsTabProps) {
             <h1>Lot Size</h1>
           </div>
           {trades.map((trade) => (
-            <div key={trade.id} className="flex justify-between items-center border-b p-[6px]">
-              <div>{trade.currencyPair}</div>
+            <div key={trade.id} className="flex justify-between items-center border-b p-[6px] border-slate-700">
+              <div className="text-gray-300">{trade.currencyPair}</div>
               <div>
                 {trade.type.charAt(0).toUpperCase() + trade.type.slice(1).toLowerCase()}
               </div>
@@ -76,7 +76,7 @@ export async function MetricsTab({ query, currentPage} : MetricsTabProps) {
 
 const CustomCard:React.FC<CustomCardProps> = ({label, value, icon, comment}) => {
     return (
-      <Card className="grid items-center">
+      <Card className="grid items-center bg-slate-800 border-none">
           <CardHeader>
               <CardTitle className="text-main-700">{label}</CardTitle>
           </CardHeader>

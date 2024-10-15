@@ -1,16 +1,11 @@
 'use client'
 
-import { BarChartIcon, PersonIcon, PlusIcon } from "@radix-ui/react-icons"
+import { BarChartIcon, PersonIcon} from "@radix-ui/react-icons"
 import clsx from "clsx";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 
 const links = [
-    {
-        name: 'Calculate',
-        href: '/dashboard/calculators',
-        icon: PlusIcon
-    },
     {
         name: 'Metrics',
         href: '/dashboard/metrics',
@@ -34,9 +29,9 @@ export default function DashBoardLinks() {
                     key={link.name}
                     href={link.href}
                     className={clsx(
-                    'flex h-[48px] grow items-center justify-center gap-2 rounded-md bg-gray-50 p-3 text-sm font-medium hover:bg-sky-100 hover:text-blue-600 md:flex-none md:justify-start md:p-2 md:px-3',
+                    'flex h-[46px] text-white grow items-center justify-center gap-2 rounded-md p-3 text-sm font-medium hover:text-violet-800 md:flex-none md:justify-start md:p-2 md:px-3 transition',
                     {
-                        'bg-sky-100 text-blue-600': pathname === link.href,
+                        ' text-violet-800': pathname === link.href,
                     },
                     )}
                 >
