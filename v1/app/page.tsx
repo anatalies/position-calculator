@@ -1,5 +1,6 @@
 import { DividerVerticalIcon, GitHubLogoIcon, InstagramLogoIcon, MoonIcon, TwitterLogoIcon } from "@radix-ui/react-icons";
-import { Database } from "lucide-react";
+import { ChartCandlestickIcon, Database } from "lucide-react";
+import Image from "next/image";
 import Link from "next/link";
 
 export default function Home() {
@@ -40,24 +41,34 @@ export default function Home() {
 		<div className="h-3/4 w-3/4 mx-auto p-1 grid grid-cols-3 gap-2">
 			<div className=" grid grid-rows-2 gap-2">
 				<div className="grid grid-cols-2 gap-2">
-					<div className="bg-purple-500 rounded flex flex-col p-3">
-						<div className="flex justify-end"><Database/></div>
-						<h1 className="font-medium">Data</h1>
+					<div className="bg-purple-500 rounded flex flex-col p-3 shadow-sm hover:scale-95 transition hover:shadow-md hover:cursor-pointer">
+						<div className="flex justify-end"><Database className="text-gray-800"/></div>
+						<div className="flex flex-col items-center place-content-center flex-1"><h1 className="font-semibold -mt-3 text-lg text-gray-800">Data</h1></div>
 					</div>
-					<div className="bg-teal-500 rounded">
-
+					<div className="bg-teal-500 rounded flex flex-col p-3 shadow-sm hover:scale-95 transition hover:shadow-md hover:cursor-pointer">
+						<div className="flex flex-col items-center place-content-center flex-1"><h1 className="font-semibold -mb-3 text-lg text-gray-800">Analytics</h1></div>
+						<div className=""><ChartCandlestickIcon className="text-gray-800"/></div>
 					</div>
 				</div>
 				<div className="bg-yellow-500 rounded">
 
 				</div>
 			</div>
-			<div className="bg-fuchsia-400 rounded">
-
+			<div className="bg-fuchsia-400 relative rounded p-1 shadow-sm hover:scale-95 transition hover:shadow-md hover:cursor-pointer">
+				<div className="absolute flex flex-col flex-1">
+					<h2 className="font-semibold drop-shadow-md text-lg text-center mt-20 text-gray-800">Start your journaling journey today!😄</h2>
+				</div>
+				<Image 
+					src={'/analytics.svg'}
+					height={300}
+					width={600}
+					alt="get started image"
+					className="object-cover h-full w-full"
+				/>
 			</div>
 			<div className="grid grid-rows-2 gap-2">
 				<div className="bg-red-400 rounded">
-
+					
 				</div>
 				<div className="bg-sky-400 rounded">
 
